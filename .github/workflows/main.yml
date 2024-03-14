@@ -1,0 +1,63 @@
+name: Rust CI
+
+on:
+  push:
+    branches-ignore:
+      - none
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: 1.55.0
+
+      - name: Build project
+        run: cargo build --verbose
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: 1.55.0
+
+      - name: Run tests
+        run: cargo test --verbose
+
+  run-and-stop:
+    name: Run and Stop
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: 1.55.0
+
+      - name: Run project
+        run: |
+          cargo run --release &
+          PID=$!
+          sleep 10 # Adjust this time according to your needs
+          kill $PID
+
