@@ -1,47 +1,59 @@
-use std::env::{args, Args};
+use std::env::args;
+
+
+
+
+#[test]
+fn test_main() {
+    main()
+}
+
 fn main() {
-    let mut args: Args = args();
-    match args.len()  {
+    let vec_args: Vec<String> = args().collect();
+
+    match vec_args.len() {
         1 => {
-            println!("No arguments provided. try --help for help");
+            help(vec_args);
             return;
         },
-        _ => {},
+        _ => {}
     }
 
-    let first_arg: String = args.nth(1).unwrap();
-    let skipped_ags = args.skip(0);
-    let mut result: String = "".to_string();
-    match first_arg.as_str()  {
-        "echo" => {
-            result= exec_echo(skipped_ags);
-        },
-        _ => println!("invalid string"),
-    }
 
-    print!("Console: {}", result)
+    println!("{}", vec_args.join(" "));
+    
+
+    if vec_args[0] == "echo" {
+        let result: String = exec_echo(vec_args);
+        println!("{}", result)
+    }
 }
+#[test]
+fn test_help() {
+    main()
+}
+
+fn help(args: Vec<String>) {
+
+    if args[0] == "echo" {
+        println!("NAME");
+        println!("%5s\nECHO: echo [...]");
+        
+        println!("%5s\n EXAMPLE: echo [...]");
+    }
+}
+
 
 #[test]
 fn test_exec_echo() {
-    let vec: Vec<String> = vec!["Hello".to_owned(), "World!".to_owned()];
-
-    let mut iter: std::slice::Iter<'_, String> = vec.iter();
-    assert_eq!("Hello World!", exec_echo(iter))
+    let args: Vec<String> = vec!["echo".to_string(), "Hello".to_string(), "World!".to_string(), 911.to_string(), "💖".to_string()];
+    assert_eq!("Hello World! 911 💖", exec_echo(args));
 }
 
 
-fn exec_echo(skipped_args: impl Iterator <Item = String>) -> String {
+fn exec_echo(mut args: Vec<String>) -> String {
+    args.remove(0);
 
-    let mut echo_string: String = "".to_owned();
-
-
-    for arg in skipped_args  {
-
-        echo_string.push_str(&arg.to_owned())
-        
-    }
-
-    return echo_string;
-
+    let echo_string = args.join(" ");
+    return echo_string.to_string();
 }
