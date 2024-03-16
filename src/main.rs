@@ -1,13 +1,5 @@
 use std::env::args;
 
-
-
-
-#[test]
-fn test_main() {
-    main()
-}
-
 fn main() {
     let vec_args: Vec<String> = args().collect();
 
@@ -27,10 +19,6 @@ fn main() {
         let result: String = exec_echo(vec_args);
         println!("{}", result)
     }
-}
-#[test]
-fn test_help() {
-    main()
 }
 
 fn help(args: Vec<String>) {

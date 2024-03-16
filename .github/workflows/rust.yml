@@ -23,5 +23,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+        - name: Get Repo
+          run: ls
+        - name: Change directory to project
+          run: cd rust-command-line-prompt
         - name: Run tests
           run: cargo test --verbose
