@@ -9,8 +9,8 @@ Welcome to "Rust Command Line Prompt" where I @fabianbernhart try to to my best 
 
 - [x] echo: repeats input
 - [x] cat: concatenates files
-- [ ] ls: lists directoriesf
-- [ ] ind: locates files or directories
+- [x] ls: lists directoriesf
+- [ ] find: locates files or directories
 - [ ] grep: matches text in files
 
 ## Source
