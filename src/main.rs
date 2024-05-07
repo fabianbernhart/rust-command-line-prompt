@@ -155,12 +155,12 @@ fn cat_command(args: Vec<String>) -> io::Result<String> {
 #[cfg(test)]
 mod cat_tests {
     use super::*;
-
+    
     #[test]
     fn test_cat_existing_file() {
-        let file_path = "static/test.txt";
+        let file_path = "test.txt";
         let contents = "This file exists for testing my rust cat command";
-        std::fs::write(file_path, contents).expect("Failed to write test file");
+        fs::write(file_path, contents).expect("Failed to write test file");
         let result: Result<String, io::Error> = cat_command(vec![file_path.to_string()]);
 
         match result {
@@ -170,7 +170,7 @@ mod cat_tests {
 
 
         
-        std::fs::remove_file(file_path).expect("Failed to remove test file");
+        fs::remove_file(file_path).expect("Failed to remove test file");
     }
 
     #[test]
