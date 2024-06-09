@@ -30,8 +30,25 @@
 	"postCreateCommand": "rustc --version",
 
 	// Configure tool-specific properties.
-	// "customizations": {}
+	"customizations": {
+        "vscode": {
+            "extensions": [
+				"dustypomerleau.rust-syntax",
+				"taiyuuki.vscode-cargo-scripts",
+				"cargo-inspect-vscode.cargo-inspect",
+				"vadimcn.vscode-lldb",
+				"serayuzgur.crates",
+				"github.vscode-github-actions",
+				"GitLab.gitlab-workflow",
+				"rust-lang.rust-analyzer",
+				"Swellaby.vscode-rust-test-adapter",
+				"ms-vscode.test-adapter-converter",
+				"hbenl.vscode-test-explorer"
+			]
+        }
+    }
+}
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
-}
+
