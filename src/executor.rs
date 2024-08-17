@@ -11,7 +11,7 @@ pub fn execute_command(command: &Command) -> ExecutionResult {
             match  commands::echo::execute(args) {
                 Ok(_) => ExecutionResult::Success,
                 Err(error) => {
-                    println!("{error}");
+                    println!("Error: {error}");
                     ExecutionResult::Failure},
             }
         },
@@ -19,7 +19,7 @@ pub fn execute_command(command: &Command) -> ExecutionResult {
             match commands::ls::execute(args) {
                 Ok(_) => ExecutionResult::Success,
                 Err(error) => {
-                    println!("{error}");
+                    println!("Error: {error}");
                     ExecutionResult::Failure},
             }
         },
@@ -27,7 +27,7 @@ pub fn execute_command(command: &Command) -> ExecutionResult {
             match commands::cat::execute(args) {
                 Ok(_) => ExecutionResult::Success,
                 Err(error) => {
-                    println!("{error}");
+                    println!("Error: {error}");
                     ExecutionResult::Failure},
             }
         },
@@ -43,7 +43,7 @@ pub fn execute_command(command: &Command) -> ExecutionResult {
             match commands::find::execute(args) {
                 Ok(_) => ExecutionResult::Success,
                 Err(error) => {
-                    println!("{error}");
+                    println!("Error: {error}");
                     ExecutionResult::Failure},
             }
         },
@@ -52,13 +52,8 @@ pub fn execute_command(command: &Command) -> ExecutionResult {
             ExecutionResult::Success
         },
         _ => {
-
-
             println!("{}: command not found", command.name);
-
             commands::helpers::help();
-
-            
             ExecutionResult::Failure
         }
     }

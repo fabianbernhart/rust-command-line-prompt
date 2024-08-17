@@ -35,12 +35,12 @@ fn main() {
         
         match io::stdout().flush() {
             Ok(_) => (),
-            Err(err) => println!("error: {err}"),
+            Err(err) => println!("Error: {err}"),
         }
 
         match io::stdin().read_line(&mut input, ) {
             Ok(_) => (),
-            Err(err) => println!("error: {err}"),
+            Err(err) => println!("Error: {err}"),
         }
 
         let command: Command = parser::parse_command_input(&input);
