@@ -1,4 +1,4 @@
-use std::fmt::Error;
+use std::io::Error;
 
 pub fn execute(args: Vec<String>) -> Result<String, Error> {
     let echo: String = args.join(" ");

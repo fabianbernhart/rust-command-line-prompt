@@ -11,15 +11,15 @@ pub fn execute_command(command: &Command) -> ExecutionResult {
             match  commands::echo::execute(args) {
                 Ok(_) => ExecutionResult::Success,
                 Err(error) => {
-                    println!("ERROR: {error}");
+                    println!("Error: {error}");
                     ExecutionResult::Failure},
             }
         },
         "ls" => {
-            match commands::ls::execute() {
+            match commands::ls::execute(args) {
                 Ok(_) => ExecutionResult::Success,
                 Err(error) => {
-                    println!("ERROR: {error}");
+                    println!("Error: {error}");
                     ExecutionResult::Failure},
             }
         },
@@ -27,7 +27,7 @@ pub fn execute_command(command: &Command) -> ExecutionResult {
             match commands::cat::execute(args) {
                 Ok(_) => ExecutionResult::Success,
                 Err(error) => {
-                    println!("ERROR: {error}");
+                    println!("Error: {error}");
                     ExecutionResult::Failure},
             }
         },
@@ -35,12 +35,25 @@ pub fn execute_command(command: &Command) -> ExecutionResult {
             match commands::clear::execute(args) {
                 Ok(_) => ExecutionResult::Success,
                 Err(_) => {
-                    println!("ERROR: Cant clear console.");
+                    println!("");
                     ExecutionResult::Failure},
             }
         }
+        "find" => {
+            match commands::find::execute(args) {
+                Ok(_) => ExecutionResult::Success,
+                Err(error) => {
+                    println!("Error: {error}");
+                    ExecutionResult::Failure},
+            }
+        },
+        "help" | "h" => {
+            commands::helpers::help();
+            ExecutionResult::Success
+        },
         _ => {
-            println!("Command not found: {}", command.name);
+            println!("{}: command not found", command.name);
+            commands::helpers::help();
             ExecutionResult::Failure
         }
     }

@@ -37,13 +37,13 @@
 				"taiyuuki.vscode-cargo-scripts",
 				"cargo-inspect-vscode.cargo-inspect",
 				"vadimcn.vscode-lldb",
-				"serayuzgur.crates",
 				"github.vscode-github-actions",
 				"GitLab.gitlab-workflow",
 				"rust-lang.rust-analyzer",
 				"Swellaby.vscode-rust-test-adapter",
 				"ms-vscode.test-adapter-converter",
-				"hbenl.vscode-test-explorer"
+				"hbenl.vscode-test-explorer",
+				"fill-labs.dependi"
 			]
         }
     }
