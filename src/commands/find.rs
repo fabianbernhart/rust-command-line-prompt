@@ -1,11 +1,10 @@
 use core::fmt;
+
 use std::fs;
-use std::io;
+
 use std::ffi::OsString;
 use std::path::PathBuf;
-use std::io::Result;
-
-use colored::Colorize;
+use std::io::{self, Result};
 
 struct DirectoryEntries {
     entries: Vec<PathBuf>,
@@ -13,8 +12,7 @@ struct DirectoryEntries {
 
 impl DirectoryEntries {
     fn new(path: PathBuf) -> Result<Self> {
-        let mut entries: Vec<PathBuf> = list_entries(path)?;
-        entries.sort_by_key(|entry| if entry.is_dir() { 1 } else { 0 });
+        let entries: Vec<PathBuf> = list_entries(path)?;
         Ok(DirectoryEntries { entries })
     }
 }
@@ -42,21 +40,25 @@ pub fn execute(args: Vec<String>) -> io::Result<()> {
     
     let dir_entries: DirectoryEntries = DirectoryEntries::new(path.into())?;
 
-    println!("{}", dir_entries);
+    print!("{}", dir_entries);
 
     Ok(())
 
 }
 
-
 fn list_entries(path: PathBuf) -> Result<Vec<PathBuf>> {
     let mut entries: Vec<PathBuf> = Vec::new();
 
     for entry in fs::read_dir(path)? {
-        let path: PathBuf = entry?.path();
-        entries.push(path.clone());
+        let entry: fs::DirEntry = entry?;
+        let entry_path: PathBuf = entry.path();
+
+        entries.push(entry_path.clone());
+        if entry_path.is_dir() {
+            let sub_entries: Vec<PathBuf> = list_entries(entry_path)?;
+            entries.extend(sub_entries)
+        }
     }
-    
 
     Ok(entries)
 }
@@ -64,19 +66,8 @@ fn list_entries(path: PathBuf) -> Result<Vec<PathBuf>> {
 impl fmt::Display for DirectoryEntries {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         for entry in &self.entries {
-            let path: &std::path::Path = entry.as_path();
-            
-            // Convert the path to a string and strip the `./` prefix if it exists
-            let path_str: String = path.display().to_string();
-            let stripped_path: &str = path_str.strip_prefix("./").unwrap_or(&path_str);
-
-            if path.is_dir() {
-                write!(f, "{} ", stripped_path.bold().green())?;
-            } else if path.is_file() {
-                write!(f, "{} ", stripped_path)?;
-            }
+            writeln!(f, "{}", entry.display())?;
         }
         Ok(())
     }
 }
-

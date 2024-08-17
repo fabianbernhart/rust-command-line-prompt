@@ -3,3 +3,4 @@ pub mod ls;
 pub mod cat;
 pub mod clear;
 pub mod helpers;
+pub mod find;
