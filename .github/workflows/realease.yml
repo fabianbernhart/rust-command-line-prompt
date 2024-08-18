@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - '*'  # Triggers the workflow on any tag push
+      - '*'
 
 jobs:
   build:
@@ -37,6 +37,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/release/your_project_name  # Replace with your binary name
-          asset_name: your_project_name  # Replace with your binary name
+          asset_path: target/release/rust-command-line-prompt
+          asset_name: rust-command-line-prompt
           asset_content_type: application/octet-stream
