@@ -5,7 +5,6 @@ mod commands;
 
 use colored::Colorize;
 use std::env;
-use std::fmt;
 use std::io;
 use std::io::Write;
 
@@ -20,14 +19,7 @@ pub enum ExecutionResult {
     Failure(String, fn()),
 }
 
-impl fmt::Display for ExecutionResult {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            ExecutionResult::Success => write!(f, "Success"),
-            ExecutionResult::Failure(err_msg, _) => write!(f, "Error: {}", err_msg),
-        }
-    }
-}
+
 
 fn main() {
     commands::helpers::help();
@@ -56,10 +48,15 @@ fn main() {
         let command: Command = parser::parse_command_input(&input);
         let result: ExecutionResult = executor::execute_command(&command);
 
+        use colored::Colorize as _;
+        let error: colored::ColoredString = "Error:".red().bold();
+
         match result {
+            
+
             ExecutionResult::Success => (),
             ExecutionResult::Failure(err_msg, usage_fn) => {
-                println!("Error: {}", err_msg);
+                println!("{error} {}", err_msg);
                 usage_fn();
             }
         }

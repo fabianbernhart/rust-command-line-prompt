@@ -1,25 +1,26 @@
+use std::io::{self, Error, ErrorKind, Write};
 use std::{ffi::OsString, fs::File, io::Read, path::Path};
-use std::io::{self, Write, Error, ErrorKind};
-
 
 pub fn usage() {
     use colored::Colorize as _;
-    let usage: colored::ColoredString = "Usage".green().bold();
-    println!("{usage} {}" , "cat [ARGS]");
+    let usage: colored::ColoredString = "Usage:".green().bold();
+    let example = "Example:".yellow().bold();
+    println!();
+    println!("{usage} {}", "cat [ARGs]");
+    println!("{example} {}", "cat file.txt")
+
 }
 
 pub fn execute(args: Vec<String>, mut io: impl Write) -> io::Result<()> {
     let os_string: OsString = match args.first() {
         Some(first_arg) => OsString::from(first_arg),
-        None => return {
-            Err(Error::new(io::ErrorKind::InvalidInput, "Invalid Input"))
-        }
+        None => return Err(Error::new(io::ErrorKind::InvalidInput, "Invalid Input")),
     };
     let path: &Path = Path::new(&os_string);
-    
+
     let mut file: File = match File::open(path) {
         Ok(file) => file,
-        Err(e) => return Err(Error::new(ErrorKind::NotFound, e))
+        Err(_) => return Err(Error::new(ErrorKind::NotFound, "Cant find file")),
     };
 
     let mut buffer = Vec::new();
@@ -38,7 +39,7 @@ mod cat_tests {
     use io::Cursor;
 
     use super::*;
-    
+
     #[test]
     fn test_cat_existing_file() {
         let file_path = "test.txt";
@@ -46,23 +47,17 @@ mod cat_tests {
 
         let mut buf: Vec<u8> = Vec::new();
         let cursor: Cursor<&mut Vec<u8>> = Cursor::new(&mut buf);
-
         let args: Vec<String> = vec![file_path.to_string()];
-
-
 
         fs::write(file_path, contents).expect("Failed to write test file");
 
         let result = execute(args, cursor);
-
-        
-        assert!(result.is_ok());
-
         let output: String = String::from_utf8(buf).unwrap();
 
+        assert!(result.is_ok());
         assert_eq!(output, contents);
 
-        fs::remove_file(file_path).expect("Failed to remove test file");        
+        fs::remove_file(file_path).expect("Failed to remove test file");
     }
 
     #[test]
@@ -73,12 +68,8 @@ mod cat_tests {
         let cursor = Cursor::new(&mut buf);
 
         let args: Vec<String> = vec![nonexistent_file_path.to_string()];
-        
+
         let result = execute(args, cursor);
-
-        let output = String::from_utf8(buf).unwrap();
-
-        print!("{}", output);
 
         assert!(result.is_err());
     }
