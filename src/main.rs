@@ -5,6 +5,7 @@ mod commands;
 
 use colored::Colorize;
 use std::env;
+use std::fmt;
 use std::io;
 use std::io::Write;
 
@@ -16,7 +17,16 @@ struct Command {
 #[derive(PartialEq)]
 pub enum ExecutionResult {
     Success,
-    Failure,
+    Failure(String, fn()),
+}
+
+impl fmt::Display for ExecutionResult {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            ExecutionResult::Success => write!(f, "Success"),
+            ExecutionResult::Failure(err_msg, _) => write!(f, "Error: {}", err_msg),
+        }
+    }
 }
 
 fn main() {
@@ -48,7 +58,13 @@ fn main() {
 
         match result {
             ExecutionResult::Success => (),
-            ExecutionResult::Failure => (),
+            ExecutionResult::Failure(err_msg, usage_fn) => {
+                println!("Error: {}", err_msg);
+                usage_fn();
+            }
         }
+
+
+
     }
 }
