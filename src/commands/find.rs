@@ -121,7 +121,6 @@ mod tests {
         let file_path = temp_dir.path().join("test_file.txt");
         File::create(&file_path).unwrap();
 
-        // Change the current directory to the temp directory
         let _orig_dir = env::set_current_dir(&temp_dir);
 
         let result = execute(vec![]);
@@ -144,7 +143,6 @@ mod tests {
         let file_path = temp_dir.path().join("test_file.txt");
         File::create(&file_path).unwrap();
 
-        // Change the current directory to the temp directory
         let _orig_dir = env::set_current_dir(&temp_dir);
 
         let result = execute(vec!["".to_string()]);

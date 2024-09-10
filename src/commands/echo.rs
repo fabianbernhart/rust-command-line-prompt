@@ -35,10 +35,7 @@ mod echo_tests {
         let args = vec!["Hello".to_string(), "🌍".to_string(), "world!".to_string()];
         let mut output = Vec::new();
 
-        // Execute the echo command
         execute(args, &mut output).unwrap();
-
-        // Verify the output
         assert_eq!(output, "Hello 🌍 world!\n".as_bytes());
     }
     #[test]
@@ -46,10 +43,7 @@ mod echo_tests {
         let args = vec!["🎉".to_string(), "🚀".to_string(), "💬".to_string()];
         let mut output = Vec::new();
 
-        // Execute the echo command
         execute(args, &mut output).unwrap();
-
-        // Verify the output
         assert_eq!(output, "🎉 🚀 💬\n".as_bytes());
     }
 }
