@@ -1,87 +1,49 @@
-use std::io;
-
-use crate::commands;
-
+use std::fmt::Display;
+use std::io::{self};
 use crate::{Command, ExecutionResult};
 
 
-pub fn no_usage() {
+
+
+pub fn no_usage() -> impl Display {
     use colored::Colorize as _;
     let usage: colored::ColoredString = "No usage provided".dimmed().white();
 
-
-    println!("{usage}");
+    format!("\n{usage}")
 }
 
 pub fn execute_command(command: &Command) -> ExecutionResult {
 
-    let args: Vec<String> = command.args.clone();   
+    use crate::commands::{echo, ls, cat, clear, find, helpers};
+
+    let args: Vec<String> = command.args.clone();
+
+    fn handle_execution<T, E>(result: Result<T, E>, usage: String) -> ExecutionResult
+    where
+        E: ToString,
+    {
+        match result {
+            Ok(_) => ExecutionResult::Success,
+            Err(error) => ExecutionResult::Failure(error.to_string(), usage),
+        }
+    }
+
+    let default_usage: String = no_usage().to_string();
 
     match command.name.as_str() {
-        "echo" => {
-            match  commands::echo::execute(args) {
-                Ok(_) => super::ExecutionResult::Success,
-                Err(error) => {
-                    let err_msg: String = error.to_string();
-                    ExecutionResult::Failure(
-                        err_msg, no_usage
-                    )
-                },
-            }
-        },
-        "ls" => {
-            match commands::ls::execute(args) {
-                Ok(_) => ExecutionResult::Success,
-                Err(error) => {
-                    let err_msg: String = error.to_string();
-                    ExecutionResult::Failure(
-                        err_msg, no_usage
-                    )
-                },
-            }
-        },
-        "cat" => {
-            match commands::cat::execute(args, io::stdout()) {
-                Ok(_) => ExecutionResult::Success,
-                Err(error) => {
-                    let err_msg: String = format!("Error: {error}");
-                    ExecutionResult::Failure(
-                        err_msg, commands::cat::usage
-                    )
-                },
-            }
-        },
-        "clear" => {
-            match commands::clear::execute(args) {
-                Ok(_) => ExecutionResult::Success,
-                Err(()) => {
-                    let err_msg: String = format!("Cant Clear");
-                    ExecutionResult::Failure(
-                        err_msg, no_usage
-                    )
-                },
-            }
-        }
-        "find" => {
-            match commands::find::execute(args) {
-                Ok(_) => ExecutionResult::Success,
-                Err(error) => {
-                    let err_msg: String = error.to_string();
-                    ExecutionResult::Failure(
-                        err_msg, no_usage
-                    )
-                },
-            }
-        },
+        "echo" => handle_execution(echo::execute(args, io::stdout()), default_usage),
+        "ls" => handle_execution(ls::execute(args), default_usage),
+        "cat" => handle_execution(cat::execute(args, io::stdout()), cat::usage().to_string()),
+        "find" => handle_execution(find::execute(args), default_usage),
+        "clear" => handle_execution(clear::execute(args), default_usage),
         "help" | "h" => {
-            commands::helpers::help();
+            println!("{}", helpers::help().to_string());
             ExecutionResult::Success
         },
         _ => return {
-            println!();
             let err_msg: String = format!(" command '{}'not found", command.name);
                     ExecutionResult::Failure(
-                        err_msg, commands::helpers::help
+                        err_msg, helpers::help().to_string()
                     )
         }
     }

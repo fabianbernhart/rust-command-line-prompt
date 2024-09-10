@@ -3,7 +3,6 @@ mod parser;
 mod executor;
 mod commands;
 
-use colored::Colorize;
 use std::env;
 use std::io;
 use std::io::Write;
@@ -16,8 +15,10 @@ struct Command {
 #[derive(PartialEq)]
 pub enum ExecutionResult {
     Success,
-    Failure(String, fn()),
+    Failure(String, String),
 }
+
+
 
 
 
@@ -52,12 +53,10 @@ fn main() {
         let error: colored::ColoredString = "Error:".red().bold();
 
         match result {
-            
-
             ExecutionResult::Success => (),
             ExecutionResult::Failure(err_msg, usage_fn) => {
                 println!("{error} {}", err_msg);
-                usage_fn();
+                println!("{}", usage_fn);
             }
         }
 

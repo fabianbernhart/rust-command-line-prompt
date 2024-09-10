@@ -1,13 +1,13 @@
-use std::io::{self, Error, ErrorKind, Write};
-use std::{ffi::OsString, fs::File, io::Read, path::Path};
+use std::fmt::Display;
+use std::io::{self, Error, Write};
+use std::{ffi::OsString, fs::File, path::Path};
 
-pub fn usage() {
+pub fn usage() -> impl Display {
     use colored::Colorize as _;
+
     let usage: colored::ColoredString = "Usage:".green().bold();
-    let example = "Example:".yellow().bold();
-    println!();
-    println!("{usage} {}", "cat [ARGs]");
-    println!("{example} {}", "cat file.txt")
+
+    format!("\n{usage} cat [OPTION]... [FILE]...\n")
 
 }
 
@@ -20,14 +20,10 @@ pub fn execute(args: Vec<String>, mut io: impl Write) -> io::Result<()> {
 
     let mut file: File = match File::open(path) {
         Ok(file) => file,
-        Err(_) => return Err(Error::new(ErrorKind::NotFound, "Cant find file")),
+        Err(err) => return Err(err),
     };
 
-    let mut buffer = Vec::new();
-
-    file.read_to_end(&mut buffer)?;
-
-    io.write_all(&buffer)?;
+    io::copy(&mut file, &mut io)?;
 
     Ok(())
 }
