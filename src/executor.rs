@@ -34,7 +34,7 @@ pub fn execute_command(command: &Command) -> ExecutionResult {
         "echo" => handle_execution(echo::execute(args, io::stdout()), default_usage),
         "ls" => handle_execution(ls::execute(args), default_usage),
         "cat" => handle_execution(cat::execute(args, io::stdout()), cat::usage().to_string()),
-        "find" => handle_execution(find::execute(args), default_usage),
+        "find" => handle_execution(find::execute(args, io::stdout()), default_usage),
         "clear" => handle_execution(clear::execute(args), default_usage),
         "help" | "h" => {
             println!("{}", helpers::help().to_string());
