@@ -58,8 +58,5 @@ fn main() {
                 println!("{}", usage_fn);
             }
         }
-
-
-
     }
 }
