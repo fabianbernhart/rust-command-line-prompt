@@ -66,7 +66,6 @@ impl fmt::Display for DirectoryEntries {
         for entry in &self.entries {
             let path: &std::path::Path = entry.as_path();
             
-            // Convert the path to a string and strip the `./` prefix if it exists
             let path_str: String = path.display().to_string();
             let stripped_path: &str = path_str.strip_prefix("./").unwrap_or(&path_str);
 

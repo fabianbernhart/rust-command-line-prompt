@@ -1,27 +1,48 @@
 use colored::Colorize;
 use std::fmt;
+use std::fmt::Display;
 
+#[derive(Debug)]
 struct CommandInfo {
     name: &'static str,
     alias: Option<&'static str>,
     description: &'static str,
 }
 
-pub fn welcome() {
-    println!("Welcome to my Rust Command Line Prompt!");
-
-    println!()
+impl fmt::Display for CommandInfo {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if let Some(alias) = self.alias {
+            write!(
+                f,
+                "  {}, {:<7} {}",
+                self.name.cyan().bold(),
+                alias.cyan().bold(),
+                self.description
+            )  
+        } else {
+            write!(
+                f,
+                "  {:<14}{}",
+                self.name.cyan().bold(),
+                self.description
+            )
+        }
+    }
 }
-pub fn help() {
 
-    welcome();
+pub fn welcome() -> impl Display {
+    format!("Welcome to my Rust Command Line Prompt!\n")
+}
 
-    let usage: colored::ColoredString = "Usage".green().bold();
+pub fn usage() -> impl Display {
+    format!("{} {}", "Usage".green().bold(), "[COMMAND] [ARGS]\n" )
+}
 
 
-    println!("{usage} {}" , "[COMMAND] [ARGS]");
+pub fn help() -> impl Display  {
 
-    println!("");
+    let welcome_format = welcome();
+    let usasge_format = usage();
 
     let commands: Vec<CommandInfo> = vec![
         CommandInfo {
@@ -55,22 +76,14 @@ pub fn help() {
             alias: None,
         },
     ];
+    
+    let commands_title = format!("{}", "Commands:".green().bold());
 
-    println!("{}", "Commands:".green().bold());
+    let formatted_commands = commands.iter()
+        .map(|command| format!("{}", command))
+        .collect::<Vec<String>>()
+        .join("\n");
 
 
-    for command in commands {
-        println!("{}", command);
-    }
-
-}
-
-impl fmt::Display for CommandInfo {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if let Some(alias) = self.alias {
-            write!(f, "  {}, {:<7} {}", self.name.cyan().bold(), alias.cyan().bold(), self.description)  
-        } else {
-            write!(f, "  {:<14}{}", self.name.cyan().bold(), self.description)
-        }
-    }
+    format!("{}\n{}\n{}\n{}\n", welcome_format, usasge_format, commands_title, formatted_commands )
 }
