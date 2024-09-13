@@ -4,11 +4,9 @@ use std::{ffi::OsString, fs::File, path::Path};
 
 pub fn usage() -> impl Display {
     use colored::Colorize as _;
-
     let usage: colored::ColoredString = "Usage:".green().bold();
 
     format!("\n{usage} cat [OPTION]... [FILE]...\n")
-
 }
 
 pub fn execute(args: Vec<String>, mut io: impl Write) -> io::Result<()> {

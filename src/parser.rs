@@ -2,6 +2,11 @@ use crate::Command;
 
 use std::str::SplitWhitespace;
 
+pub fn parse_keyboard_input(input: AsRef<String>) {
+    
+}
+
+
 pub fn parse_command_input (input: &str) -> Command {
     let mut parts: SplitWhitespace = input.trim().split_whitespace();
 

@@ -31,7 +31,6 @@ fn main() {
             Err(err) => todo!("{}", err), 
         };
 
-
         let mut input: String = String::new();
         input.clear();
         print!("{} {} $ ", "rcm".magenta(), current_path);
