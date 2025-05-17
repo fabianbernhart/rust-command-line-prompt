@@ -1,5 +1,6 @@
 use std::fmt::Display;
 use std::io::{self};
+use crate::commands::wc;
 use crate::{Command, ExecutionResult};
 
 
@@ -36,6 +37,7 @@ pub fn execute_command(command: &Command) -> ExecutionResult {
         "cat" => handle_execution(cat::execute(args, io::stdout()), cat::usage().to_string()),
         "find" => handle_execution(find::execute(args, io::stdout()), default_usage),
         "clear" => handle_execution(clear::execute(args), default_usage),
+        "wc" => handle_execution(wc::execute(args, io::stdout()), wc::usage().to_string()),
         "help" | "h" => {
             println!("{}", helpers::help().to_string());
             ExecutionResult::Success
